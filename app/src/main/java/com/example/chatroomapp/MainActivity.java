@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().hide();
         add_room = findViewById(R.id.btn_add_room);
         room_name = findViewById(R.id.room_name_edittext);
         listView = findViewById(R.id.listView);
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(arrayAdapter);
 
         request_username();
+
 
         add_room.setOnClickListener(new View.OnClickListener() {
             @Override
