@@ -9,28 +9,33 @@
 
     <FrameLayout
         android:id="@+id/banner"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/black">
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/yellowboxfont"
-            android:paddingLeft="20dp"
-            android:paddingTop="30dp"
-            android:text="yellow box"
-            android:textColor="@color/white"
-            android:textSize="36sp" />
+        android:layout_width="388dp"
+        android:layout_height="53dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/rounded_corners"
+        android:backgroundTint="@color/black">
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="70dp"
-            android:paddingLeft="70dp"
-            android:paddingTop="20dp"
+            android:layout_width="35dp"
+            android:layout_height="31dp"
             app:srcCompat="@drawable/cube" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="140dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="40dp"
+            android:fontFamily="@font/yellowboxfont"
+            android:gravity="center_vertical"
+            android:text="yellow box"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
 
     </FrameLayout>
 
@@ -56,15 +61,19 @@
         android:textColor="@color/white"
         android:textColorHint="@color/white" />
 
-    <ListView
-        android:id="@+id/listView"
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="641dp"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentTop="true"
+        android:layout_height="598dp"
+        android:layout_alignBottom="@id/room_name_edittext"
         android:layout_alignParentEnd="false"
-        android:layout_marginTop="82dp">
+        android:layout_marginBottom="54dp">
 
-    </ListView>
+        <LinearLayout
+            android:id="@+id/linearScroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
 </RelativeLayout>

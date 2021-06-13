@@ -1,40 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_yellow">
 
-    <Button
-        android:id="@+id/btn_send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentTop="false"
+    <FrameLayout
+        android:id="@+id/banner"
+        android:layout_width="388dp"
+        android:layout_height="53dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="false"
-        android:layout_alignParentBottom="true"
-        android:text="send" />
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/rounded_corners"
+        android:backgroundTint="@color/black">
 
-    <com.google.android.material.textfield.TextInputLayout
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="35dp"
+            android:layout_height="31dp"
+            app:srcCompat="@drawable/cube" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="140dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="40dp"
+            android:fontFamily="@font/yellowboxfont"
+            android:gravity="center_vertical"
+            android:text="yellow box"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+
+    </FrameLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:hint="say something!">
+        android:layout_height="match_parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/msg_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
+            android:layout_width="377dp"
+            android:layout_height="44dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rounded_corners"
+            android:backgroundTint="@color/black"
             android:hint="say something!"
+            android:textAlignment="viewStart"
             android:textColor="@color/white"
-            android:textColorHint="@color/white" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:textColorHint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/ic_menu_send"
+            app:layout_constraintBottom_toBottomOf="@+id/msg_input"
+            app:layout_constraintEnd_toEndOf="@+id/msg_input" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="672dp">
+        android:layout_height="607dp"
+        android:layout_below="@+id/banner"
+        android:layout_marginTop="-2dp">
 
         <LinearLayout
             android:id="@+id/conversation"

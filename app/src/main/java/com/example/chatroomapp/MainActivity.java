@@ -13,7 +13,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -34,12 +36,15 @@ public class MainActivity extends AppCompatActivity {
     private Button add_room;
     private EditText room_name;
 
-    private ListView listView;
+    //private ListView listView;
+    private LinearLayout linearScroll;
     private ArrayAdapter<String> arrayAdapter;
     private ArrayList<String> list_of_rooms = new ArrayList<>();
 
     private String name;
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference().getRoot();
+
+    ArrayList<Button> roomBtns = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +54,13 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         add_room = findViewById(R.id.btn_add_room);
         room_name = findViewById(R.id.room_name_edittext);
-        listView = findViewById(R.id.listView);
+        //listView = findViewById(R.id.listView);
+        linearScroll = findViewById(R.id.linearScroll);
 
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,list_of_rooms);
 
-        listView.setAdapter(arrayAdapter);
+        //listView.setAdapter(arrayAdapter);
+
 
         request_username();
 
@@ -71,16 +78,49 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Iterator i = snapshot.getChildren().iterator();
-                Set<String> set = new HashSet<String>();
 
-                while(i.hasNext())
-                {
-                    set.add(((DataSnapshot)i.next()).getKey());
-                    list_of_rooms.clear();
-                    list_of_rooms.addAll(set);
+                linearScroll.removeAllViewsInLayout();
 
-                    arrayAdapter.notifyDataSetChanged();
+                for (DataSnapshot dsp : snapshot.getChildren()) {
+                    //Userlist.add(); //add result into array list
+                    Button newRoomButton = new Button(getApplicationContext());
+                    newRoomButton.setText(String.valueOf(dsp.getKey()));
+                    newRoomButton.setTextAlignment(Button.TEXT_ALIGNMENT_VIEW_START);
+                    newRoomButton.setBackgroundTintList(getResources().getColorStateList(R.color.darker_yellow));
+                    newRoomButton.setTextColor(getResources().getColor(R.color.black));
+                    newRoomButton.setPadding(50,60,0,60);
+                    newRoomButton.setTextSize(20);
+                    linearScroll.addView(newRoomButton);
+
+                    newRoomButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getApplicationContext(), Chat_Room.class);
+                            intent.putExtra("room_name",(newRoomButton.getText().toString()));
+                            intent.putExtra("user_name",name);
+                            startActivity(intent);
+                        }
+                    });
                 }
+
+
+//                Set<String> set = new HashSet<String>();
+//                HashMap<String,Object> Map = new HashMap<>();
+//
+//                while(i.hasNext())
+//                {
+//                    set.add(((DataSnapshot)i.next()).getKey());
+//                    list_of_rooms.clear();
+//                    list_of_rooms.addAll(set);
+//
+//                    //arrayAdapter.notifyDataSetChanged();
+//                    Button newRoomButton = new Button(getApplicationContext());
+//                    newRoomButton.setText((String)((DataSnapshot)i.next()).getValue());
+//                    linearScroll.addView(newRoomButton);
+//
+//                }
+
+
             }
 
             @Override
@@ -89,15 +129,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), Chat_Room.class);
-                intent.putExtra("room_name",((TextView)view).getText().toString());
-                intent.putExtra("user_name",name);
-                startActivity(intent);
-            }
-        });
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent intent = new Intent(getApplicationContext(), Chat_Room.class);
+//                intent.putExtra("room_name",((TextView)view).getText().toString());
+//                intent.putExtra("user_name",name);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     private void request_username() {
