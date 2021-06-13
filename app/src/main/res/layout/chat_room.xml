@@ -64,6 +64,17 @@
             android:background="@android:drawable/ic_menu_send"
             app:layout_constraintBottom_toBottomOf="@+id/msg_input"
             app:layout_constraintEnd_toEndOf="@+id/msg_input" />
+
+        <Button
+            android:id="@+id/imagify"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="44dp"
+            android:background="@android:drawable/ic_menu_send"
+            app:layout_constraintBottom_toBottomOf="@+id/msg_input"
+            app:layout_constraintEnd_toEndOf="@+id/msg_input" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
