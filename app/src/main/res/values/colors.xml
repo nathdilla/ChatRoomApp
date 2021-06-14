@@ -4,5 +4,6 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name ="background_yellow">#FFD22D</color>
+    <color name ="darker_yellow">#FFC800</color>
     <color name="user_bubble_color">#434343</color>
 </resources>
