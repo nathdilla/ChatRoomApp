@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -27,7 +28,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
+import org.jsoup.Jsoup;
+import org.jsoup.select.Elements;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -36,11 +44,11 @@ import java.util.Map;
 public class Chat_Room extends AppCompatActivity
 {
     private Button send_button;
+    private Button imagify_button;
     private EditText message_input;
     private TextView text_conversation;
     private LinearLayout convo_layout;
     private ScrollView scrollView;
-
     private String user_name,room_name;
     private DatabaseReference root;
     private String temp_key;
@@ -54,6 +62,7 @@ public class Chat_Room extends AppCompatActivity
 
         getSupportActionBar().hide();
         send_button = findViewById(R.id.btn_send);
+        imagify_button = findViewById(R.id.imagify);
         message_input = findViewById(R.id.msg_input);
         text_conversation = findViewById(R.id.textView);
         convo_layout = findViewById(R.id.conversation);
@@ -80,6 +89,32 @@ public class Chat_Room extends AppCompatActivity
                 Map<String,Object> map2 = new HashMap<String,Object>();
                 map2.put("name", user_name);
                 map2.put("msg", message_input.getText().toString());
+
+                message_root.updateChildren(map2);
+
+                message_input.getText().clear();
+            }
+        });
+
+
+
+        imagify_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Map<String,Object> map =new HashMap<String,Object>();
+                temp_key = root.push().getKey();
+                root.updateChildren(map);
+
+                DatabaseReference message_root = root.child(temp_key);
+
+                Map<String,Object> map2 = new HashMap<String,Object>();
+                map2.put("name", user_name);
+                map2.put("msg", "%"+"https://images.squarespace-cdn.com/content/v1/5a1592ff0abd04" +
+                        "e470d48744/1512553461588-BZ9X4L2F5CINL2DU8QTF/ke17ZwdGBToddI8pDm48k" +
+                        "PQujXO7frs1W7a77FZyt1F7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk" +
+                        "725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0prfa1Z6I" +
+                        "eUrCPboCAmmHZn3ZVtqnTHXt-4Tm3byPSNDpHfFtqjKxWw0uc1YBtkl-w/Kaas.jpeg?" +
+                        "format=2500w\n");
 
                 message_root.updateChildren(map2);
 
@@ -165,38 +200,50 @@ public class Chat_Room extends AppCompatActivity
 
     private void createNewBubble(String message, String user)
     {
-        TextView bubble = new TextView(this);
-
-        String text = "<font color='#FFD22D'>"+user+"</font>";
-        bubble.setLayoutParams(text_conversation.getLayoutParams());
-        bubble.setBackground(text_conversation.getBackground());
-        bubble.setTextColor(text_conversation.getTextColors());
-        bubble.setTextSize(text_conversation.getTextSize());
-        bubble.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)+": " + message);
-        if (user == user_name)
+        if (ParseImage.hasImageLink(message))
         {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.gravity = Gravity.RIGHT;
-            params.rightMargin = 40;
-            params.topMargin = 30;
-            params.leftMargin = 100;
-            bubble.setLayoutParams(params);
-            bubble.setBackgroundTintList(this.getResources().getColorStateList(R.color.user_bubble_color));
-        }
-        convo_layout.addView(bubble);
+            //bubble.setText("CHEEEEEEEEEEEEEESE");
+            ImageView image = new ImageView((this));
 
-//        int colorFrom = getResources().getColor(R.color.black);
-//        int colorTo = getResources().getColor(R.color.white);
-//        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
-//        colorAnimation.setDuration(1000); // milliseconds
-//        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-//
-//            @Override
-//            public void onAnimationUpdate(ValueAnimator animator) {
-//                bubble.setTextColor((int) animator.getAnimatedValue());
-//            }
-//
-//        });
-//        colorAnimation.start();
+            Picasso.get().load(message.substring(1,message.length())).into(image);
+            convo_layout.addView(image);
+        }
+        else
+            {
+            TextView bubble = new TextView(this);
+
+            String text = "<font color='#FFD22D'>" + user + "</font>";
+            bubble.setLayoutParams(text_conversation.getLayoutParams());
+            bubble.setBackground(text_conversation.getBackground());
+            bubble.setTextColor(text_conversation.getTextColors());
+            bubble.setTextSize(text_conversation.getTextSize());
+            bubble.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY) + ": " + message);
+
+
+            if (user == user_name) {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                params.gravity = Gravity.RIGHT;
+                params.rightMargin = 40;
+                params.topMargin = 30;
+                params.leftMargin = 100;
+                bubble.setLayoutParams(params);
+                bubble.setBackgroundTintList(this.getResources().getColorStateList(R.color.user_bubble_color));
+            }
+            convo_layout.addView(bubble);
+
+            //        int colorFrom = getResources().getColor(R.color.black);
+            //        int colorTo = getResources().getColor(R.color.white);
+            //        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+            //        colorAnimation.setDuration(1000); // milliseconds
+            //        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            //
+            //            @Override
+            //            public void onAnimationUpdate(ValueAnimator animator) {
+            //                bubble.setTextColor((int) animator.getAnimatedValue());
+            //            }
+            //
+            //        });
+            //        colorAnimation.start();
+        }
     }
 }

@@ -2,6 +2,10 @@ package com.example.chatroomapp;
 
 import android.util.Log;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,7 +20,24 @@ public class ParseImage
         this.hasImage = hasImageLink(url);
     }
 
-    private boolean hasImageLink(String url)
+    public String getImage(String searchParameters) {
+        String result = "";
+        //String ua = "Mozilla/5.0";
+        try {
+            String googleUrl = "https://www.google.com/search?tbm=isch&q=" + searchParameters.replace(",", "");
+            //Document doc1 = Jsoup.connect(googleUrl).userAgent(ua).timeout(10 * 1000).get();
+            Document doc1 = Jsoup.connect(googleUrl).get();
+            Element media = doc1.select("[data-src]").first();
+            String sourceUrl = media.attr("abs:data-src");
+
+            result = "http://images.google.com/search?tbm=isch&q=" + searchParameters + " image source= " + sourceUrl.replace("&quot", "");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    static boolean hasImageLink(String url)
     {
         boolean output=false;
         Pattern p = Pattern.compile("^%https?");
