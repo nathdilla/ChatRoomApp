@@ -40,7 +40,7 @@
     </FrameLayout>
 
     <Button
-        android:id="@+id/btn_add_room"
+        android:id="@+id/enter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="false"
